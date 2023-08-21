@@ -8,23 +8,7 @@ import AddRecipe from "./addrecipe";
 export default function Page() {
   return (
     <View style={styles.container}>
-      <Login/>
-      {/* <AddRecipe/> */}
-      {/* <MainContainer/> */}
-      
-      {/* <View style={styles.main}> */}
-        {/* <Text style={styles.title}>Hello World</Text>
-        <Text style={styles.subtitle}>This is the first page of your app.</Text> */}
-        {/* <Link href="/home">
-          <Text style={styles.subtitle}>Home</Text>
-        </Link>
-        <Link href="/profileuser">
-          <Text style={styles.subtitle}>Profile</Text>
-        </Link>
-        <Link href="/login">
-          <Text style={styles.subtitle}>Login</Text>
-        </Link> */}
-      {/* </View> */}
+      <Login />
     </View>
   );
 }
@@ -32,7 +16,7 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-alignItems:'center'
+    alignItems: 'center'
   },
   main: {
     flex: 1,

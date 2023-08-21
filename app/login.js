@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { NativeBaseProvider, Stack, Input, Icon, Pressable, Avatar, Text, Button, View } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
-import defaultImg from "../assets/image/login/default.jpg"
-import { Link } from "expo-router";
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import defaultImg from "../assets/image/login/default.jpg";
+import { Link } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../app/redux/actions/userAction";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 export default function Login() {
     const [show, setShow] = useState(false);
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+
+    const [data, setData] = useState({
+        users_email: "",
+        users_confirmpassword: "",
+    });
+
+    const onChange = (key, value) => {
+        setData({
+            ...data,
+            [key]: value,
+        });
+    };
+
+    const onClick = () => {
+        dispatch(loginUser(data, navigation));
+    };
 
     return (
         <NativeBaseProvider>
@@ -25,6 +44,7 @@ export default function Login() {
                     }}
                     InputLeftElement={<Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="muted.400" />}
                     placeholder="Name"
+                    onChangeText={(value) => onChange('users_email', value)}
                     key="name-input"
                 />
                 <Input backgroundColor={'#F5F5F5'}
@@ -35,7 +55,7 @@ export default function Login() {
                     }}
                     type={show ? "text" : "password"}
                     InputLeftElement={
-                        <Icon as={<MaterialIcons name="lock" />} size={5} ml="2" color="muted.400" /> // Replace "lock" with the icon name you want
+                        <Icon as={<MaterialIcons name="lock" />} size={5} ml="2" color="muted.400" />
                     }
                     InputRightElement={
                         <Pressable onPress={() => setShow(!show)}>
@@ -43,11 +63,14 @@ export default function Login() {
                         </Pressable>
                     }
                     placeholder="Password"
+                    onChangeText={(value) => onChange('users_confirmpassword', value)}
                     key="password-input"
                 />
-                <Text key="forgot-password">
-                    Forgot Password?
-                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')} key="forgot-password">
+                    <Text>
+                        Forgot Password?
+                    </Text>
+                </TouchableOpacity>
                 <Button
                     size='md'
                     borderRadius={13}
@@ -56,7 +79,7 @@ export default function Login() {
                         md: "25%"
                     }}
                     backgroundColor={'#EFC81A'}
-                    onPress={() => navigation.navigate('main')}
+                    onPress={onClick}
                     key="login-button"
                 >
                     Login
@@ -64,11 +87,11 @@ export default function Login() {
                 <Text key="no-account">
                     Don't have an account?
                 </Text>
-                <Link href="/register" key="register-link">
+                <TouchableOpacity onPress={() => navigation.navigate('register')} key="register-link">
                     <Text color="#EFC81A">
                         Register
                     </Text>
-                </Link>
+                </TouchableOpacity>
             </Stack>
         </NativeBaseProvider>
     );

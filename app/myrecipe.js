@@ -6,56 +6,67 @@ import { Link } from 'expo-router'
 import back from "../assets/image/popular/back.png"
 import { MaterialIcons } from "@expo/vector-icons";
 import ModalUpdateRecipe from '../components/ModalUpdateRecipe'
-
-
+import axios from 'axios'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native'
+import ModalDeleteRecipe from '../components/ModalDeleteRecipe'
 
 const MyRecipe = () => {
+    let [recipes, setRecipes] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const getid = await AsyncStorage.getItem("users_id_profile");
+                const response = await axios.get(`http://192.168.43.192:7474/recipes/users/${getid}`);
+                setRecipes(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
             <NativeBaseProvider>
-                {/* <Flex direction="row" mb="2.5" mt="3.5">
-                    <View >
-                        <Image size="lg" source={back} />
-                    </View>
-                    <View style={{ marginLeft: 49, marginTop: 9 }}>
-                        <Text style={{ color: '#EFC81A', fontSize: 21, fontWeight: 'bold' }}>My Recipe</Text>
 
-                    </View>
-                </Flex> */}
-
-                <Flex direction="row" mb="2.5" mt="1.5">
-                    <View>
-                        <Image size="lg" source={list} />
-                    </View>
-                    <View style={{ marginLeft: 10 }}>
-                        <Text style={{ fontSize: 20, }}>Margherita</Text>
+                {recipes.map((recipe) => (
+                    <Flex direction="row" mb="2.5" mt="1.5">
                         <View>
-                            <Text>In Veg Pizza</Text>
+                            <Image size="lg" source={{ uri: recipe.recipes_photo }} style={{ width: 64, height: 64, borderRadius: 13 }} />
                         </View>
-                        <View>
-                            <Text>Spicy</Text>
+                        <View style={{ marginLeft: 10 }}>
+                            <Text style={{ fontSize: 20, }}>{recipe.recipes_title}</Text>
+                            <View>
+                                <Text>⭐ 4.9</Text>
+                            </View>
                         </View>
-                    </View>
 
-                        <ModalUpdateRecipe/>
-                    {/* <View style={{ marginLeft: 46,  marginTop: 15 }}> */}
-                        {/* <Button
-                            style={{
-                                backgroundColor: '#1E90FF'
-                            }}>
-                            <Icon as={MaterialIcons} color={'white'} size={5} name="create" />
-                        </Button> */}
-                    {/* </View> */}
-                    <View style={{ marginLeft: 'auto', marginRight:33, marginTop: 15 }}>
-                        <Button
-                            style={{
-                                backgroundColor: 'red'
-                            }}>
-                            <Icon as={MaterialIcons} color={'white'} size={5} name="delete" />
-                        </Button>
-                    </View>
-                </Flex>
+                        <ModalUpdateRecipe
+                            recipes_id={recipe.recipes_id}
+                            recipes_title={recipe.recipes_title}
+                            recipes_ingredients={recipe.recipes_ingredients}
+                            recipes_photo={recipe.recipes_photo}
+                            recipes_video={recipe.recipes_video}
+                        />
+                        <ModalDeleteRecipe
+                            recipes_id={recipe.recipes_id}
+                        />
+
+                        {/* <View style={{ marginLeft: 'auto', marginRight: 33, marginTop: 15 }}>
+                            <Button
+                                style={{
+                                    backgroundColor: 'red'
+                                }}>
+                                <Icon as={MaterialIcons} color={'white'} size={5} name="delete" />
+                            </Button>
+                        </View> */}
+                    </Flex>
+                ))}
+
 
 
             </NativeBaseProvider>

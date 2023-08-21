@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { Image, Button, SafeAreaView, Text, View, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { Image, Button, SafeAreaView, Text, View, StyleSheet, TouchableOpacity, StatusBar, RefreshControl } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Input, NativeBaseProvider, ScrollView, Stack, Icon, Heading, TextArea, Avatar, Flex } from 'native-base';
 import { MaterialIcons } from 'react-native-vector-icons';
 import Popular from '../app/popular';
-import carou from "../assets/image/carousel/carou.png"
-import carou2 from "../assets/image/carousel/carou-2.png"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DetailResep from '../app/detailresep';
 import Profile from '../app/profileuser';
 import AddRecipe from '../app/addrecipe';
@@ -17,6 +16,14 @@ import panah from '../assets/image/profile/shape.png'
 import MyRecipe from '../app/myrecipe';
 import LikedsRecipe from '../app/likeds';
 import Saved from '../app/saved';
+import axios from 'axios';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { getRecipe } from '../app/redux/actions/recipeAction';
+import Page from '../app';
+import Login from '../app/login';
+import { CommonActions } from '@react-navigation/native';
 
 
 
@@ -32,12 +39,33 @@ function HomeScreen({ navigation }) {
     const onPress = () => {
         navigation.navigate('detailresep');
     };
+    const dispatch = useDispatch();
+    const [recipe, setRecipe] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const fetchData = () => {
+        dispatch(getRecipe(setRecipe));
+        setRefreshing(false);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchData();
+    };
+
+    const handleOnClick = (recipes_id) => {
+        navigation.navigate('Details', { id: recipes_id }); // Navigate to detail screen with ID
+      };
+
+
     return (
         <NativeBaseProvider>
             <SafeAreaView style={styles.container}>
-                <ScrollView>
-
-                    <Stack space={4} alignItems="center" marginTop={13} key="stack" >
+                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                    <Stack space={4} alignItems="center" marginTop={13} key="stack">
                         <Input
                             borderRadius={13}
                             w={{
@@ -48,92 +76,56 @@ function HomeScreen({ navigation }) {
                             placeholder="Search Pasta, Bread, etc"
                             key="input-search"
                         />
-                        {/* <Carousel key="carousel" /> */}
                         <Heading fontSize="xl" pb="3" marginRight={'60%'}>
                             New Recipes
                         </Heading>
                         <ScrollView w={["320"]} horizontal={true}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou2}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou2}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou2}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-                                <View style={styles.carouselItem}>
-                                    <Image
-                                        source={carou}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-
+                            {recipe.map((item, index) => (
+                                <TouchableOpacity
+                                    key={index.toString()}
+                                    // onPress={() => navigation.navigate('Details')} 
+                                    onPress={() => handleOnClick(item.recipes_id)}
+                                    style={styles.touchable}
+                                >
+                                    <View style={styles.carouselItem}>
+                                        <Image source={{ uri: item.recipes_photo }} style={styles.image} />
+                                        <Text style={styles.imageText}>{item.recipes_title}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
                         </ScrollView>
                     </Stack>
                     <Popular />
                 </ScrollView>
             </SafeAreaView>
-
-
         </NativeBaseProvider>
     );
 }
 
 function ProfileScreen({ navigation }) {
-    // const onPressLike = () => {
-    //     navigation.navigate('likeds');
-    // };
-    // const onPressEditProfile = () => {
-    //     navigation.navigate('editprofile');
-    // };
-    // const onPressMyRecipe = () => {
-    //     navigation.navigate('myrecipe');
-    // };
-    // const onPressSaved = () => {
-    //     navigation.navigate('saved');
-    // };
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.multiRemove(["users_id", "users_id_profile", "token"]);
+            // navigation.dispatch('login');
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <Profile
             onPressLike={() => navigation.navigate('likeds')}
             onPressEditProfile={() => navigation.navigate('editprofile')}
             onPressMyRecipe={() => navigation.navigate('myrecipe')}
             onPressSaved={() => navigation.navigate('saved')}
+            handleLogout={handleLogout}
         />
+    );
+}
+
+function IndexPageScreen() {
+    return (
+        // <Page/>
+        <Login/>
     );
 }
 
@@ -192,6 +184,7 @@ function ProfileStackScreen() {
             <ProfileStack.Screen name="myrecipe" component={MyRecipeScreen} />
             <ProfileStack.Screen name="saved" component={SavedScreen} />
             <ProfileStack.Screen name="likeds" component={LikedScreen} />
+            <ProfileStack.Screen name="login" component={IndexPageScreen} options={{ headerShown: false }} />
         </ProfileStack.Navigator>
     );
 }
@@ -248,6 +241,25 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
     carouselItem: {
-        marginRight: -20
+        marginRight: 13
     },
+    image: {
+        width: 170,
+        height: 200,
+        borderRadius: 15,
+        resizeMode: "cover"
+    },
+    imageText: {
+        marginLeft:7,
+        marginRight:7,
+        fontSize:25,
+        fontWeight:'bold',
+        color:'white',
+        marginTop: 5,
+        bottom:0,
+        marginBottom:29,
+        position: 'absolute',
+        // textAlign: "center",
+
+      },
 });

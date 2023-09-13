@@ -1,22 +1,22 @@
-import { SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { SafeAreaView, TouchableOpacity, Image, Alert  } from 'react-native'
 import React from 'react'
 import { Avatar, Icon, NativeBaseProvider, Stack, View, Text, Flex } from 'native-base'
 import { MaterialIcons } from "@expo/vector-icons";
 import defaultImg from "../assets/image/login/default.jpg"
-import { useNavigation } from 'expo-router';
+import { useNavigation } from "@react-navigation/native";
 import panah from '../assets/image/profile/shape.png'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const Profile = ({ onPressLike, onPressEditProfile, onPressMyRecipe, onPressSaved, handleLogout }) => {
+const Profile = ({ onPressLike,  onPressMyRecipe, onPressSaved, handleLogout }) => {
   const [users, setUsers] = useState({});
   useEffect(() => {
     const getData = async () => {
       try {
         const getid = await AsyncStorage.getItem("users_id_profile");
-        const response = await axios.get(`http://192.168.43.192:7474/users/profile/${getid}`);
+        const response = await axios.get(`http://192.168.1.5:7474/users/profile/${getid}`);
 
         const userData = response.data.data[0];
         setUsers(userData);
@@ -32,6 +32,8 @@ const Profile = ({ onPressLike, onPressEditProfile, onPressMyRecipe, onPressSave
   }, []);
 
   const navigation = useNavigation();
+
+
   return (
     <SafeAreaView style={{ backgroundColor: "#EEC302", height: 306 }}>
       <NativeBaseProvider>
@@ -41,7 +43,9 @@ const Profile = ({ onPressLike, onPressEditProfile, onPressMyRecipe, onPressSave
         </Stack>
         <View backgroundColor={'white'} h='200%' w='90%' paddingLeft={6} marginTop={'-60'} borderRadius={20} marginLeft={'5%'}>
 
-          <TouchableOpacity onPress={onPressEditProfile}>
+          <TouchableOpacity 
+          // onPress={onPressEditProfile}
+          >
             <Flex direction="row" mb="2.5" mt="4" marginTop={5}>
               <View>
                 {<Icon as={MaterialIcons} color="#EFC81A" size={8} name="person" />}
@@ -97,10 +101,12 @@ const Profile = ({ onPressLike, onPressEditProfile, onPressMyRecipe, onPressSave
             </Flex>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => {
-            alert(
+          <TouchableOpacity 
+          // onPress={handleLogout}
+          onPress={() => {
+            Alert.alert(
               "Logout",
-              "Are you sure you want to log out?",
+              "Are you sure you want to log out ?",
               [
                 {
                   text: "Cancel",
@@ -108,18 +114,19 @@ const Profile = ({ onPressLike, onPressEditProfile, onPressMyRecipe, onPressSave
                 },
                 {
                   text: "Ok",
-                  onPress: async () => {
-                    await AsyncStorage.clear();
-                    navigation.navigate("login"); // Navigate after clearing AsyncStorage
+                  onPress: () => {
+                    AsyncStorage.clear();
+                    navigation.navigate("login");
                   },
-                  style: "destructive", // Use "destructive" for the Ok button
+                  style: "cancel",
                 },
               ],
               {
                 cancelable: true,
               }
             );
-          }}>
+          }}
+          >
             <Flex direction="row" mb="2.5" mt="4">
               <View>
                 <Icon as={MaterialIcons} size={8} name="logout" color="#FF0000" />

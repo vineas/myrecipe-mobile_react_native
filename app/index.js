@@ -2,13 +2,16 @@ import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import MainContainer from "../navigation/MainContainer";
 import Login from "./login";
-import Home from "./home";
-import AddRecipe from "./addrecipe";
+import Main from "./main";
+import { createStackNavigator } from "@react-navigation/stack";
 
 export default function Page() {
+  const Stack = createStackNavigator();
+
   return (
     <View style={styles.container}>
       <Login />
+      {/* <Main/> */}
     </View>
   );
 }

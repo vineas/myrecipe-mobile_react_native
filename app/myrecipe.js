@@ -19,7 +19,7 @@ const MyRecipe = () => {
         const fetchData = async () => {
             try {
                 const getid = await AsyncStorage.getItem("users_id_profile");
-                const response = await axios.get(`http://192.168.43.192:7474/recipes/users/${getid}`);
+                const response = await axios.get(`http://192.168.1.5:7474/recipes/users/${getid}`);
                 setRecipes(response.data.data);
             } catch (error) {
                 console.log(error);
@@ -55,15 +55,6 @@ const MyRecipe = () => {
                         <ModalDeleteRecipe
                             recipes_id={recipe.recipes_id}
                         />
-
-                        {/* <View style={{ marginLeft: 'auto', marginRight: 33, marginTop: 15 }}>
-                            <Button
-                                style={{
-                                    backgroundColor: 'red'
-                                }}>
-                                <Icon as={MaterialIcons} color={'white'} size={5} name="delete" />
-                            </Button>
-                        </View> */}
                     </Flex>
                 ))}
 

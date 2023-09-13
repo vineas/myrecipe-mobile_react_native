@@ -40,30 +40,9 @@ const ModalUpdateRecipe = ({ recipes_id, recipes_title, recipes_ingredients, rec
         });
     };
 
-    // const handleUpload = async () => {
-    //     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    //     if (!permissionResult.granted) {
-    //         alert('Permission to access camera roll is required!');
-    //         return;
-    //     }
-
-    //     const pickerResult = await ImagePicker.launchImageLibraryAsync();
-
-    //     if (!pickerResult.cancelled) {
-    //         setImage(pickerResult.uri);
-    //     }
-    // };
-
-
     const handleSubmit = async () => {
         try {
             const formData = new FormData();
-            // formData.append('recipes_photo', {
-            //     uri: image,
-            //     name: 'recipe_photo.jpg', // You can adjust the name if needed
-            //     type: 'image/jpg', // Change the mime type if needed
-            // });
             if (recipes_photo) {
                 formData.append('recipes_photo', {
                     uri: recipes_photo,

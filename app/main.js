@@ -9,7 +9,6 @@ import BottomNav from '../components/bottomnav';
 const Main = () => {
   return (
     <NavigationContainer independent={true}>
-      {/* <BottomNav/> */}
       <MainContainer />
     </NavigationContainer>
   )

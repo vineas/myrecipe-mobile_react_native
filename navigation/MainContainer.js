@@ -11,8 +11,6 @@ import DetailResep from '../app/detailresep';
 import Profile from '../app/profileuser';
 import AddRecipe from '../app/addrecipe';
 import { Ionicons } from '@expo/vector-icons';
-import defaultImg from "../assets/image/login/default.jpg"
-import panah from '../assets/image/profile/shape.png'
 import MyRecipe from '../app/myrecipe';
 import LikedsRecipe from '../app/likeds';
 import Saved from '../app/saved';
@@ -24,6 +22,8 @@ import { getRecipe } from '../app/redux/actions/recipeAction';
 import Page from '../app';
 import Login from '../app/login';
 import { CommonActions } from '@react-navigation/native';
+import { TabActions } from '@react-navigation/native';
+
 
 
 
@@ -42,6 +42,7 @@ function HomeScreen({ navigation }) {
     const dispatch = useDispatch();
     const [recipe, setRecipe] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [searchText, setSearchText] = useState("");
 
     const fetchData = () => {
         dispatch(getRecipe(setRecipe));
@@ -58,7 +59,11 @@ function HomeScreen({ navigation }) {
 
     const handleOnClick = (recipes_id) => {
         navigation.navigate('Details', { id: recipes_id }); // Navigate to detail screen with ID
-      };
+    };
+
+    const filteredRecipes = recipe.filter((item) =>
+        item.recipes_title.toLowerCase().includes(searchText.toLowerCase())
+    );
 
 
     return (
@@ -75,12 +80,14 @@ function HomeScreen({ navigation }) {
                             InputLeftElement={<Icon as={MaterialIcons} name="search" size={5} ml={2} color="muted.400" />}
                             placeholder="Search Pasta, Bread, etc"
                             key="input-search"
+                            onChangeText={(text) => setSearchText(text)}
+                            value={searchText}
                         />
                         <Heading fontSize="xl" pb="3" marginRight={'60%'}>
                             New Recipes
                         </Heading>
                         <ScrollView w={["320"]} horizontal={true}>
-                            {recipe.map((item, index) => (
+                            {filteredRecipes.map((item, index) => (
                                 <TouchableOpacity
                                     key={index.toString()}
                                     // onPress={() => navigation.navigate('Details')} 
@@ -102,30 +109,34 @@ function HomeScreen({ navigation }) {
     );
 }
 
+
+const handleLogout = async (navigation) => {
+    try {
+        await AsyncStorage.clear();
+        navigation.navigate('login');
+        console.log();
+    } catch (error) {
+        console.log(error);
+    }
+};
 function ProfileScreen({ navigation }) {
-    const handleLogout = async () => {
-        try {
-            await AsyncStorage.multiRemove(["users_id", "users_id_profile", "token"]);
-            // navigation.dispatch('login');
-        } catch (error) {
-            console.log(error);
-        }
-    };
     return (
-        <Profile
-            onPressLike={() => navigation.navigate('likeds')}
-            onPressEditProfile={() => navigation.navigate('editprofile')}
-            onPressMyRecipe={() => navigation.navigate('myrecipe')}
-            onPressSaved={() => navigation.navigate('saved')}
-            handleLogout={handleLogout}
-        />
+        <>
+            <Profile
+                onPressLike={() => navigation.navigate('likeds')}
+                onPressEditProfile={() => navigation.navigate('editprofile')}
+                onPressMyRecipe={() => navigation.navigate('myrecipe')}
+                onPressSaved={() => navigation.navigate('saved')}
+                handleLogout={() => handleLogout(navigation)}
+            />
+        </>
     );
 }
 
 function IndexPageScreen() {
     return (
         // <Page/>
-        <Login/>
+        <Login />
     );
 }
 
@@ -250,16 +261,16 @@ const styles = StyleSheet.create({
         resizeMode: "cover"
     },
     imageText: {
-        marginLeft:7,
-        marginRight:7,
-        fontSize:25,
-        fontWeight:'bold',
-        color:'white',
+        marginLeft: 7,
+        marginRight: 7,
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'white',
         marginTop: 5,
-        bottom:0,
-        marginBottom:29,
+        bottom: 0,
+        marginBottom: 29,
         position: 'absolute',
         // textAlign: "center",
 
-      },
+    },
 });

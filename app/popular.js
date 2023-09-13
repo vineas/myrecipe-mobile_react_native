@@ -19,6 +19,11 @@ const Popular = () => {
     useEffect(() => {
         dispatch(getRecipe(setRecipe));
     }, []);
+
+    //     const handleOnClick = (recipes_id) => {
+    //         const navigation = 
+    //     navigation.navigate('Details', { id: recipes_id }); // Navigate to detail screen with ID
+    // };
     return (
         <SafeAreaView style={styles.container}>
             <NativeBaseProvider>
@@ -38,6 +43,7 @@ const Popular = () => {
                 {recipe.map((item, index) => (
                     <TouchableOpacity
                         key={index.toString()}
+                        // onPress={() => handleOnClick(item.recipes_id)}
                         onPress={() => navigation.navigate('Details')}
                         style={styles.touchable}
                     >
@@ -54,12 +60,12 @@ const Popular = () => {
                             <Text>Spicy</Text>
                         </View> */}
                             </View>
-                            <View style={{ marginLeft: 'auto', marginRight: 13, marginTop: 15 }}>
+                            {/* <View style={{ marginLeft: 'auto', marginRight: 13, marginTop: 15 }}>
                                 <Image size="lg" source={bookmark} />
                             </View>
                             <View style={{ marginRight: 13, marginTop: 15 }}>
                                 <Image size="lg" source={like} />
-                            </View>
+                            </View> */}
                         </Flex>
                     </TouchableOpacity>
 

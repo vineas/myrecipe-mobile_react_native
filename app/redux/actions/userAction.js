@@ -9,7 +9,7 @@ import { useNavigation } from "expo-router";
 export const userRegister = (data, navigation) => async (dispatch) => {
     // const navigate = useNavigation();
     try {
-        const response = await axios.post(`http://192.168.43.192:7474/users/register`, data);
+        const response = await axios.post(`http://192.168.1.5:7474/users/register`, data);
 
         if (response.status === 201) {
             Alert.alert(
@@ -49,7 +49,7 @@ export const userRegister = (data, navigation) => async (dispatch) => {
 
 export const loginUser = (data, navigation) => async (dispatch) => {
     try {
-        const response = await axios.post(`http://192.168.43.192:7474/users/login`, data);
+        const response = await axios.post(`http://192.168.1.5:7474/users/login`, data);
 
         console.log(response.data.data);
 

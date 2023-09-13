@@ -100,9 +100,10 @@ const detailresep = () => {
             users_id: dataUser,
         };
         console.log(data);
-        axios.post("http://192.168.43.192:7474/likeds", data).then((res) => {
+        axios.post("http://192.168.1.5:7474/likeds", data)
+        .then((res) => {
             if (res.data.statusCode === 201) {
-                alert("Like Recipe Success");
+                alert("You like this recipe");
             } else if (res.data.message === "Like Already") {
                 alert("Liked Already");
             }
@@ -117,7 +118,7 @@ const detailresep = () => {
             users_id: dataUser,
         };
         console.log(data);
-        axios.post("http://192.168.43.192:7474/bookmarks", data).then((res) => {
+        axios.post("http://192.168.1.5:7474/bookmarks", data).then((res) => {
             if (res.data.statusCode === 201) {
                 alert("Save Recipe Success");
             } else if (res.data.message === "Bookmarks Already") {

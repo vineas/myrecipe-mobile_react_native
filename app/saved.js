@@ -16,7 +16,7 @@ const Saved = () => {
         const fetchData = async () => {
             try {
                 const getid = await AsyncStorage.getItem("users_id_profile");
-                const response = await axios.get(`http://192.168.43.192:7474/bookmarks/${getid}`);
+                const response = await axios.get(`http://192.168.1.5:7474/bookmarks/${getid}`);
                 setSaved(response.data.data);
             } catch (error) {
                 console.log(error);
@@ -28,7 +28,7 @@ const Saved = () => {
 
     const handleDeleteSave = (bookmarks_id) => {
         axios
-            .delete(`http://192.168.43.192:7474/bookmarks/${bookmarks_id}`)
+            .delete(`http://192.168.1.5:7474/bookmarks/${bookmarks_id}`)
             .then((res) => {
                 alert(
                     "Unsave this recipe",

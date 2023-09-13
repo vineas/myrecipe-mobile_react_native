@@ -159,9 +159,4 @@ Contributions are what make the open source community such an amazing place to b
 
 :rocket: [`Frontend Mama Recipe`](https://github.com/vineas/myrecipe-mobile_react_native)
 
-:rocket: [`Demo Mama Recipe`](https://team-project-kelompok1-pijar-frontend.vercel.app)
-
-
-
-Deployment Project Link: [https://team-project-kelompok1-pijar-frontend.vercel.app](https://team-project-kelompok1-pijar-frontend.vercel.app)
-Original Project Link: [https://github.com/vineas/myrecipe-mobile_react_native](https://github.com/vineas/myrecipe-mobile_react_native)
+<!-- :rocket: [`Demo Mama Recipe`](https://team-project-kelompok1-pijar-frontend.vercel.app) -->

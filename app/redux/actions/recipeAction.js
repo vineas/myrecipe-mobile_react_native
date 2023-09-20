@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 
 export const getRecipe = (setRecipe) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://192.168.1.5:7474/recipes`);
+    const response = await axios.get(`https://team-project-kelompok1-pijar-backend.vercel.app/recipes`);
     setRecipe(response.data.data);
     const tokenGet = await AsyncStorage.getItem('token')
     console.log("Token user: " + tokenGet)
@@ -18,7 +18,7 @@ export const getRecipe = (setRecipe) => async (dispatch) => {
 
 export const getDetailRecepe = (setRecipe, id) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://192.168.1.5:7474/recipes/${id}`);
+    const response = await axios.get(`https://team-project-kelompok1-pijar-backend.vercel.app/recipes/${id}`);
     setRecipe(response.data.data[0]);
     console.log(response.data.data[0]);
     dispatch({ type: "GET_DETAIL_RECEPE", payload: "success" });
@@ -38,7 +38,7 @@ export const createRecipe = (data, recipes_photo) => async (dispatch) => {
 
     // console.log(FormData.append("recipes_title", data.recipes_title));
     console.log(data);
-    const response = await axios.post(`http://192.168.1.5:7474/recipes`, formData, {
+    const response = await axios.post(`https://team-project-kelompok1-pijar-backend.vercel.app/recipes`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

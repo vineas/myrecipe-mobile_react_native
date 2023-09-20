@@ -16,7 +16,7 @@ const Profile = ({ onPressLike,  onPressMyRecipe, onPressSaved, handleLogout }) 
     const getData = async () => {
       try {
         const getid = await AsyncStorage.getItem("users_id_profile");
-        const response = await axios.get(`http://192.168.1.5:7474/users/profile/${getid}`);
+        const response = await axios.get(`https://team-project-kelompok1-pijar-backend.vercel.app/users/profile/${getid}`);
 
         const userData = response.data.data[0];
         setUsers(userData);
@@ -38,7 +38,7 @@ const Profile = ({ onPressLike,  onPressMyRecipe, onPressSaved, handleLogout }) 
     <SafeAreaView style={{ backgroundColor: "#EEC302", height: 306 }}>
       <NativeBaseProvider>
         <Stack space={4} w="100%" alignItems="center" justifyContent="center" height="100%" marginTop={10}>
-          <Avatar w={'34%'} h={'40%'} source={defaultImg} />
+        <Avatar w={'34%'} h={'40%'} source={{ uri: users.users_photo }} />
           <Text style={{ fontSize: 22, color: 'white' }}>{users.users_name}</Text>
         </Stack>
         <View backgroundColor={'white'} h='200%' w='90%' paddingLeft={6} marginTop={'-60'} borderRadius={20} marginLeft={'5%'}>

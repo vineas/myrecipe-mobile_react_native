@@ -19,7 +19,7 @@ const MyRecipe = () => {
         const fetchData = async () => {
             try {
                 const getid = await AsyncStorage.getItem("users_id_profile");
-                const response = await axios.get(`http://192.168.1.5:7474/recipes/users/${getid}`);
+                const response = await axios.get(`https://team-project-kelompok1-pijar-backend.vercel.app/recipes/users/${getid}`);
                 setRecipes(response.data.data);
             } catch (error) {
                 console.log(error);

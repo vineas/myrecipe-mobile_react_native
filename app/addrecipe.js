@@ -45,7 +45,7 @@ const AddRecipe = () => {
                     type: "image/jpeg"
                 })
             }
-            const res = await axios.post("http://192.168.1.5:7474/recipes", formData,
+            const res = await axios.post("https://team-project-kelompok1-pijar-backend.vercel.app/recipes", formData,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",

@@ -17,7 +17,7 @@ const likeds = () => {
         const fetchData = async () => {
             try {
                 const getid = await AsyncStorage.getItem("users_id_profile");
-                const response = await axios.get(`http://192.168.1.5:7474/likeds/${getid}`);
+                const response = await axios.get(`https://team-project-kelompok1-pijar-backend.vercel.app/likeds/${getid}`);
                 setLikeds(response.data.data);
             } catch (error) {
                 console.log(error);
@@ -29,7 +29,7 @@ const likeds = () => {
 
     const handleDeleteLike = (likeds_id) => {
         axios
-            .delete(`http://192.168.1.5:7474/likeds/${likeds_id}`)
+            .delete(`https://team-project-kelompok1-pijar-backend.vercel.app/likeds/${likeds_id}`)
             .then((res) => {
                 alert(
                     "Unlike this recipe",

@@ -100,7 +100,7 @@ const detailresep = () => {
             users_id: dataUser,
         };
         console.log(data);
-        axios.post("http://192.168.1.5:7474/likeds", data)
+        axios.post("https://team-project-kelompok1-pijar-backend.vercel.app/likeds", data)
         .then((res) => {
             if (res.data.statusCode === 201) {
                 alert("You like this recipe");
@@ -118,7 +118,7 @@ const detailresep = () => {
             users_id: dataUser,
         };
         console.log(data);
-        axios.post("http://192.168.1.5:7474/bookmarks", data).then((res) => {
+        axios.post("https://team-project-kelompok1-pijar-backend.vercel.app/bookmarks", data).then((res) => {
             if (res.data.statusCode === 201) {
                 alert("Save Recipe Success");
             } else if (res.data.message === "Bookmarks Already") {
